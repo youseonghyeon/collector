@@ -19,14 +19,16 @@ public class BookMark {
     private Long id;
     private String url;
     private String img;
+    private String category;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public BookMark(String url, String img, User user) {
+    public BookMark(String url, String img, String category, User user) {
         this.url = url;
         this.img = img;
+        this.category = category;
         if (user != null) {
             assignUser(user);
         }

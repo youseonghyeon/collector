@@ -22,9 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @Commit
 class BookMarkRepositoryTest {
 
-    @Autowired EntityManager em;
-    @Autowired BookMarkRepository bookMarkRepository;
-    @Autowired UserRepository userRepository;
+    @Autowired
+    EntityManager em;
+    @Autowired
+    BookMarkRepository bookMarkRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     public void 북마크_추가() {
@@ -46,6 +49,8 @@ class BookMarkRepositoryTest {
         User user = createUser("user", "qwe123");
         BookMark bookMark = new BookMark("https://www.naver.com", "123.img", user);
         bookMarkRepository.save(bookMark);
+        em.flush();
+        em.clear();
 
         //when
         bookMarkRepository.delete(bookMark);

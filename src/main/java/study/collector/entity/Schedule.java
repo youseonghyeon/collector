@@ -3,6 +3,7 @@ package study.collector.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,13 +13,13 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Calendar {
+@ToString
+public class Schedule {
 
     @Id
     @GeneratedValue
-    @Column(name = "calendar_id")
+    @Column(name = "schedule_id")
     private Long id;
-
     private LocalDateTime date;
     private String content;
 
@@ -26,7 +27,7 @@ public class Calendar {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Calendar(LocalDateTime date, String content, User user) {
+    public Schedule(LocalDateTime date, String content, User user) {
         this.date = date;
         this.content = content;
         if (user != null) {
@@ -36,6 +37,6 @@ public class Calendar {
 
     public void assignUser(User user) {
         this.user = user;
-        user.getCalendars().add(this);
+        user.getSchedules().add(this);
     }
 }

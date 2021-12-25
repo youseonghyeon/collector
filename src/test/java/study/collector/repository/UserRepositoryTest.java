@@ -23,7 +23,6 @@ class UserRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
-    JPAQueryFactory queryFactory;
 
     @Test
     public void 회원가입() {
