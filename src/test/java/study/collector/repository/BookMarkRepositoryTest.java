@@ -33,7 +33,7 @@ class BookMarkRepositoryTest {
     public void 북마크_추가() {
         //given
         User user = createUser("user", "qwe123");
-        BookMark bookMark = new BookMark("https://www.naver.com", "123.img", user);
+        BookMark bookMark = new BookMark("https://www.naver.com", "123.img", "shopping", user);
         bookMarkRepository.save(bookMark);
 
         //when
@@ -47,7 +47,7 @@ class BookMarkRepositoryTest {
     public void 북마크_삭제() {
         //given
         User user = createUser("user", "qwe123");
-        BookMark bookMark = new BookMark("https://www.naver.com", "123.img", user);
+        BookMark bookMark = new BookMark("https://www.naver.com", "123.img", "shopping", user);
         bookMarkRepository.save(bookMark);
         em.flush();
         em.clear();

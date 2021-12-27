@@ -24,10 +24,10 @@ public class User extends BaseTimeEntity {
     private String email;
     private String memo;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<BookMark> bookMarks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Schedule> schedules = new ArrayList<>();
 
     public User(String uid, String password) {

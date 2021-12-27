@@ -8,8 +8,7 @@ import study.collector.entity.Schedule;
 import study.collector.entity.User;
 
 import javax.persistence.EntityManager;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest
@@ -28,9 +27,9 @@ class ScheduleRepositoryTest {
         User user = new User("user", "qwe123");
         userRepository.save(user);
 
-        Schedule calendar1 = new Schedule(LocalDateTime.now(), "JPA 수업 듣기", user);
+        Schedule calendar1 = new Schedule(LocalDate.now(), "JPA 수업 듣기", user);
         scheduleRepository.save(calendar1);
-        Schedule calendar2 = new Schedule(LocalDateTime.now(), "홍대 미팅", user);
+        Schedule calendar2 = new Schedule(LocalDate.now(), "홍대 미팅", user);
         scheduleRepository.save(calendar2);
 
         List<Schedule> schedules = scheduleRepository.searchByUserId(user.getId());

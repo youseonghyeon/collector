@@ -15,6 +15,7 @@ import study.collector.repository.ScheduleRepository;
 import study.collector.repository.UserRepository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import static study.collector.entity.QSchedule.schedule;
 
 @SpringBootTest
 @Transactional
+@Commit
 class ScheduleServiceTest {
 
     @Autowired
@@ -43,11 +45,10 @@ class ScheduleServiceTest {
     @Test
     public void 일정_추가() {
         //given
-        User user = new User("user", "qwe123");
-        em.persist(user);
+        User user = createUser("user", "qwe123");
 
         //when
-        scheduleService.create(LocalDateTime.now(), "내용", user);
+        scheduleService.create(LocalDate.now(), "내용", user.getId());
 
         //then
         List<Schedule> result = queryFactory
@@ -62,10 +63,8 @@ class ScheduleServiceTest {
     @Test
     public void 일정_삭제() {
         //given
-        User user = new User("user", "qwe123");
-        em.persist(user);
-        Schedule schedule = new Schedule(LocalDateTime.now(), "내용", user);
-        em.persist(schedule);
+        User user = createUser("user", "qwe123");
+        Schedule schedule = createSchedule("내용", user);
 
         //when
         scheduleRepository.deleteById(schedule.getId());
@@ -76,5 +75,31 @@ class ScheduleServiceTest {
         User findUser = userRepository.findById(user.getId()).get();
 
         assertThat(findUser.getSchedules().size()).isEqualTo(0);
+    }
+
+    @Test
+    public void 일정_조회() {
+        //given
+        User user = createUser("user", "qwe123");
+        createSchedule("내용1", user);
+        createSchedule("내용2", user);
+
+        //when
+        List<Schedule> schedules = scheduleService.searchById(user.getId());
+
+        //then
+        assertThat(schedules.size()).isEqualTo(2);
+    }
+
+    public User createUser(String id, String password) {
+        User user = new User(id, password);
+        em.persist(user);
+        return user;
+    }
+
+    public Schedule createSchedule(String content, User user) {
+        Schedule schedule = new Schedule(LocalDate.now(), content, user);
+        em.persist(schedule);
+        return schedule;
     }
 }

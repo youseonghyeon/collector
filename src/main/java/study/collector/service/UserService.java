@@ -1,6 +1,8 @@
 package study.collector.service;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.collector.entity.User;
@@ -35,12 +37,17 @@ public class UserService {
     }
 
     /**
-     * 회원 삭제
+     * 회원 탈퇴
      */
 
     @Transactional
     public void remove(User user) {
         userRepository.delete(user);
+    }
+
+    @Transactional
+    public void removeById(Long userId) {
+        userRepository.deleteById(userId);
     }
 
     /**
@@ -54,7 +61,8 @@ public class UserService {
             User user = optionalUser.get();
             user.changeMemo(memo);
         } catch (Exception e) {
-            System.out.println("e = " + e);
+            Logger logger = LoggerFactory.getLogger(UserService.class);
+            logger.error("존재하지 않는 유저입니다. {}", e);
         }
     }
 

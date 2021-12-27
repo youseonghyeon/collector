@@ -20,11 +20,6 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    @GetMapping("/home") // test Controller
-    public String HomePage() {
-        return "HOME";
-    }
-
     @PostMapping("/users/new") // 회원가입
     public Long createUser(@RequestBody joinRequest request) {
 
@@ -42,14 +37,14 @@ public class UserController {
         private String email;
     }
 
-    @PostMapping("users/secession") // 아이디 삭제
+    @PostMapping("/users/secession") // 아이디 삭제
     public String deleteUser(@RequestBody UserDto userDto) {
         User findUsers = userRepository.findByUid(userDto.getId());
         userService.remove(findUsers);
         return "ok";
     }
 
-    @PostMapping("users/validate") // 아이디 중복 검증
+    @PostMapping("/users/validate") // 아이디 중복 검증
     public String validateDuplicateUser(@RequestBody @Valid validateUserRequest request) {
         try {
             userService.validateDuplicateUser(request.getId());
