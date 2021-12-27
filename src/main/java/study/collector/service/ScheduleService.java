@@ -25,12 +25,14 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
+    private final EntityManager em;
 
 
     // 일정 추가
     @Transactional
     public Long create(LocalDate date, String content, Long userId) {
         Optional<User> findUser = userRepository.findById(userId);
+
         try {
             // 유저가 존재하면
             Schedule schedule = new Schedule(date, content, findUser.get());
@@ -46,5 +48,11 @@ public class ScheduleService {
     //일정 조회
     public List<Schedule> searchById(Long userId) {
         return scheduleRepository.findAllByUserId(userId);
+    }
+
+    //일정 삭제
+    @Transactional
+    public void deleteById(Long scheduleId) {
+        scheduleRepository.deleteById(scheduleId);
     }
 }

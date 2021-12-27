@@ -5,6 +5,6 @@ import study.collector.entity.Schedule;
 
 import java.util.List;
 
-public interface ScheduleRepository extends JpaRepository<Schedule, Long>, ScheduleRepositoryCustom {
+public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findAllByUserId(Long userId);
 }

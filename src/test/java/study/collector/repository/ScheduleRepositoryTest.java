@@ -32,7 +32,7 @@ class ScheduleRepositoryTest {
         Schedule calendar2 = new Schedule(LocalDate.now(), "홍대 미팅", user);
         scheduleRepository.save(calendar2);
 
-        List<Schedule> schedules = scheduleRepository.searchByUserId(user.getId());
+        List<Schedule> schedules = scheduleRepository.findAllByUserId(user.getId());
 
         for (Schedule schedule : schedules) {
             System.out.println("schedule = " + schedule);

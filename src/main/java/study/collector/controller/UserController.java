@@ -62,18 +62,18 @@ public class UserController {
 
     @PostMapping("/users/memo")
     public String getMemo(@RequestBody memoRequest request) {
-        Optional<User> optionalUser = userRepository.findById(request.getId());
+        Optional<User> optionalUser = userRepository.findById(request.getUserid());
         return optionalUser.get().getMemo();
     }
 
     @PostMapping("/users/savememo")
     public void saveMemo(@RequestBody memoRequest request) {
-        userService.saveMemo(request.getId(), request.getMemo());
+        userService.saveMemo(request.getUserid(), request.getMemo());
     }
 
     @Data
     static class memoRequest {
-        private Long id;
+        private Long Userid;
         private String memo;
     }
 

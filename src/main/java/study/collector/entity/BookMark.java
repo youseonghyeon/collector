@@ -17,17 +17,19 @@ public class BookMark {
     @GeneratedValue
     @Column(name = "bookmark_id")
     private Long id;
+    private String name;
     private String url;
-    private String img;
+    private String imgUrl;
     private String category;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public BookMark(String url, String img, String category, User user) {
+    public BookMark(String name, String url, String img, String category, User user) {
+        this.name = name;
         this.url = url;
-        this.img = img;
+        this.imgUrl = img;
         this.category = category;
         if (user != null) {
             assignUser(user);
@@ -38,5 +40,13 @@ public class BookMark {
         this.user = user;
         user.getBookMarks().add(this);
     }
+
+    public void changeBookMark(String name, String url, String imgUrl, String category) {
+        this.name = name;
+        this.url = url;
+        this.imgUrl = imgUrl;
+        this.category = category;
+    }
+
 
 }

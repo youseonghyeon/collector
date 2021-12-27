@@ -24,7 +24,6 @@ import static study.collector.entity.QSchedule.schedule;
 
 @SpringBootTest
 @Transactional
-@Commit
 class ScheduleServiceTest {
 
     @Autowired
