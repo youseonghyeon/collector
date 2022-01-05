@@ -26,13 +26,9 @@ import static study.collector.entity.QSchedule.schedule;
 @Transactional
 class ScheduleServiceTest {
 
-    @Autowired
     ScheduleService scheduleService;
-    @Autowired
     ScheduleRepository scheduleRepository;
-    @Autowired
     UserRepository userRepository;
-    @Autowired
     EntityManager em;
     JPAQueryFactory queryFactory;
 
@@ -84,7 +80,7 @@ class ScheduleServiceTest {
         createSchedule("내용2", user);
 
         //when
-        List<Schedule> schedules = scheduleService.searchById(user.getId());
+        List<Schedule> schedules = scheduleService.search(user.getId());
 
         //then
         assertThat(schedules.size()).isEqualTo(2);

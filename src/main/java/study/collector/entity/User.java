@@ -8,35 +8,33 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.CascadeType.ALL;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseTimeEntity {
+public class User {
 
     @Id
     @GeneratedValue
     @Column(name = "user_id")
     private Long id;
-    private String uid;
+    private String loginId;
     private String password;
     private String email;
     private String memo;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<BookMark> bookMarks = new ArrayList<>();
+    private List<BookMarkTable> bookMarkTables = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Schedule> schedules = new ArrayList<>();
 
-    public User(String uid, String password) {
-        this.uid = uid;
+    public User(String loginId, String password) {
+        this.loginId = loginId;
         this.password = password;
     }
 
-    public User(String uid, String password, String email) {
-        this.uid = uid;
+    public User(String loginId, String password, String email) {
+        this.loginId = loginId;
         this.password = password;
         this.email = email;
     }

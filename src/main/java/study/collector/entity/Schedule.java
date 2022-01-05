@@ -44,4 +44,6 @@ public class Schedule {
         this.user = user;
         user.getSchedules().add(this);
     }
+
+
 }

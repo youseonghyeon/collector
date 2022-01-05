@@ -1,16 +1,16 @@
 package study.collector.service;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.collector.entity.User;
+import study.collector.exception.customexception.UserException;
 import study.collector.repository.UserRepository;
 
-import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -19,32 +19,54 @@ public class UserService {
     private final UserRepository userRepository;
 
     /**
-     * 회원가입
+     * userId로 유저 찾기
      */
-    @Transactional
-    public Long join(User user) {
-        validateDuplicateUser(user.getUid()); // 아이디 중복 검증
-        userRepository.save(user);
-        return user.getId();
+    public User searchByLoginId(String loginId) {
+        Optional<User> optionalUser = userRepository.findByLoginId(loginId);
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        } else {
+            throw new UserException("회원을 찾을 수 없습니다.1");
+        }
     }
 
-    // 아이디 중복 검사
-    public void validateDuplicateUser(String uid) {
-        User findUsers = userRepository.findByUid(uid);
-        if (findUsers != null) {
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+    public User searchById(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        } else {
+            throw new UserException("회원을 찾을 수 없습니다.2");
         }
     }
 
     /**
-     * 회원 탈퇴
+     * 회원가입
      */
-
     @Transactional
-    public void remove(User user) {
-        userRepository.delete(user);
+    public Long join(User user) {
+        boolean validate = validateDuplLoginId(user.getLoginId());// 아이디 중복 검증
+        if (validate) {
+            userRepository.save(user);
+            return user.getId();
+        }
+        return null;
     }
 
+    /**
+     * 아이디 중복 검사
+     */
+    public boolean validateDuplLoginId(String loginId) {
+        Optional<User> findUsers = userRepository.findByLoginId(loginId);
+        if (findUsers.isPresent()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 인
+     * 아이디로 회원 탈퇴
+     */
     @Transactional
     public void removeById(Long userId) {
         userRepository.deleteById(userId);
@@ -53,16 +75,38 @@ public class UserService {
     /**
      * 메모 저장
      */
-
     @Transactional
-    public void saveMemo(Long userId, String memo) {
+    public String saveMemo(Long userId, String newMemo) {
         Optional<User> optionalUser = userRepository.findById(userId);
-        try {
-            User user = optionalUser.get();
-            user.changeMemo(memo);
-        } catch (Exception e) {
-            Logger logger = LoggerFactory.getLogger(UserService.class);
-            logger.error("존재하지 않는 유저입니다. {}", e);
+        if (optionalUser.isPresent()) {
+            optionalUser.get().changeMemo(newMemo);
+            return newMemo;
+        }
+        return null;
+    }
+
+    /**
+     * 메모 조회
+     */
+    public String searchMemo(Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            return optionalUser.get().getMemo();
+        }
+        return null;
+    }
+
+    /**
+     * 로그인
+     */
+    public User login(String loginId, String password) {
+        User findUser = searchByLoginId(loginId);
+        String findPassword = findUser.getPassword();
+        if (findPassword.equals(password)) {
+            log.info("로그인 성공");
+            return findUser;
+        } else {
+            return null;
         }
     }
 

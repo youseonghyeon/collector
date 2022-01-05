@@ -1,17 +1,15 @@
 package study.collector.service;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
+import study.collector.dto.bookmarkdto.BookMarkResponse;
 import study.collector.entity.BookMark;
+import study.collector.entity.BookMarkTable;
 import study.collector.entity.User;
-import study.collector.repository.BookMarkRepository;
-import study.collector.repository.ScheduleRepository;
-import study.collector.repository.UserRepository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -20,35 +18,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
+@Commit
 public class BookMarkServiceTest {
 
     @Autowired
-    BookMarkRepository bookMarkRepository;
-    @Autowired
     BookMarkService bookMarkService;
     @Autowired
-    UserRepository userRepository;
-    @Autowired
     EntityManager em;
-    JPAQueryFactory queryFactory;
 
     @BeforeEach
     public void init() {
-        queryFactory = new JPAQueryFactory(em);
     }
 
     //일정 추가
     @Test
-    public void 북마크_추가() {
+    @Commit
+    public void 북마크_검색() {
         //given
-        User user = new User("abc", "qwe123");
+        User user = new User("test", "test");
         em.persist(user);
+        BookMarkTable table1 = new BookMarkTable("table1", user);
+        BookMarkTable table2 = new BookMarkTable("table2", user);
+        em.persist(table1);
+        em.persist(table2);
 
-        //when
-        bookMarkService.create("새로운 북마크", "http://url", "http://img.url", "category", user.getId());
+        BookMark bookMark1 = new BookMark("bookMark1", "http:ss", "http:ss", table1);
+        BookMark bookMark2 = new BookMark("bookMark2", "http:ss", "http:ss", table1);
+        BookMark bookMark3 = new BookMark("bookMark3", "http:ss", "http:ss", table2);
+        BookMark bookMark4 = new BookMark("bookMark4", "http:ss", "http:ss", table2);
+        em.persist(bookMark1);
+        em.persist(bookMark2);
+        em.persist(bookMark3);
+        em.persist(bookMark4);
 
+        List<BookMarkResponse> aa = bookMarkService.search(user.getId());
         //then
-        List<BookMark> bookMarks = bookMarkRepository.findAllByUserId(user.getId());
-        assertThat(bookMarks.size()).isEqualTo(1);
+    }
+
+    @Test
+    void test() {
+
     }
 }
+

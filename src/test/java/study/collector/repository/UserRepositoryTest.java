@@ -51,8 +51,8 @@ class UserRepositoryTest {
         assertThat(findUser.getPassword()).isEqualTo("abc123");
     }
 
-    private User createUser(String uid, String password) {
-        User user = new User(uid, password);
+    private User createUser(String loginId, String password) {
+        User user = new User(loginId, password);
         User savedUser = userRepository.save(user);
         return savedUser;
     }
