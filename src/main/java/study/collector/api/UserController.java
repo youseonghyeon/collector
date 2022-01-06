@@ -74,7 +74,7 @@ public class UserController {
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_USER, sessionUserDto);
 
-        return "ok";
+        return "로그인 성공!!";
     }
 
     @PostMapping("/withdrawal") // 회원 탈퇴

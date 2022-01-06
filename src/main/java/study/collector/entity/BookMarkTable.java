@@ -42,4 +42,8 @@ public class BookMarkTable {
         this.user = user;
         user.getBookMarkTables().add(this);
     }
+
+    public void changeTableName(String tableName) {
+        this.tableName = tableName;
+    }
 }

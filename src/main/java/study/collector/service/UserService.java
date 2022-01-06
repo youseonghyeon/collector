@@ -103,7 +103,6 @@ public class UserService {
         User findUser = searchByLoginId(loginId);
         String findPassword = findUser.getPassword();
         if (findPassword.equals(password)) {
-            log.info("로그인 성공");
             return findUser;
         } else {
             return null;

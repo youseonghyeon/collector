@@ -62,10 +62,10 @@ public class BookMarkService implements BookMarkServiceInterface {
 
     //북마크 추가
     @Transactional
-    public Long create(String name, String url, String imgUrl, Long bookMarkTableId) {
+    public Long create(String name, String url, Long bookMarkTableId) {
         Optional<BookMarkTable> optionalTable = tableRepository.findById(bookMarkTableId);
         if (optionalTable.isPresent()) {
-            BookMark saveBookmark = bookMarkRepository.save(new BookMark(name, url, imgUrl, optionalTable.get()));
+            BookMark saveBookmark = bookMarkRepository.save(new BookMark(name, url, optionalTable.get()));
             return saveBookmark.getId();
         } else {
             throw new BookMarkException("북마크 저장 실패");
@@ -80,11 +80,11 @@ public class BookMarkService implements BookMarkServiceInterface {
 
     //북마크 수정
     @Transactional
-    public Long change(String name, String url, String imgUrl, Long bookMarkId) {
+    public Long change(String name, String url, Long bookMarkId) {
         Optional<BookMark> optionalBookMark = bookMarkRepository.findById(bookMarkId);
         if (optionalBookMark.isPresent()) {
             BookMark bookMark = optionalBookMark.get();
-            bookMark.changeBookMark(name, url, imgUrl);
+            bookMark.changeBookMark(name, url);
             return bookMarkId;
         } else {
             throw new BookMarkException("해당 북마크가 존재하지 않습니다.");

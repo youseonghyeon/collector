@@ -12,7 +12,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"id", "name", "url", "imgUrl"})
+@ToString(of = {"id", "name", "url"})
 public class BookMark {
 
     @Id
@@ -21,16 +21,14 @@ public class BookMark {
     private Long id;
     private String name;
     private String url;
-    private String imgUrl;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "bookmark_table_id")
     private BookMarkTable bookMarkTable;
 
-    public BookMark(String name, String url, String imgUrl, BookMarkTable bookMarkTable) {
+    public BookMark(String name, String url, BookMarkTable bookMarkTable) {
         this.name = name;
         this.url = url;
-        this.imgUrl = imgUrl;
         if (bookMarkTable != null) {
             assignBookMarkTable(bookMarkTable);
         }
@@ -41,11 +39,9 @@ public class BookMark {
         bookMarkTable.getBookMarks().add(this);
     }
 
-    public void changeBookMark(String name, String url, String imgUrl) {
+    public void changeBookMark(String name, String url) {
         this.name = name;
         this.url = url;
-        this.imgUrl = imgUrl;
     }
-
 
 }

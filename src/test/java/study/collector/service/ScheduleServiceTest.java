@@ -72,19 +72,6 @@ class ScheduleServiceTest {
         assertThat(findUser.getSchedules().size()).isEqualTo(0);
     }
 
-    @Test
-    public void 일정_조회() {
-        //given
-        User user = createUser("user", "qwe123");
-        createSchedule("내용1", user);
-        createSchedule("내용2", user);
-
-        //when
-        List<Schedule> schedules = scheduleService.search(user.getId());
-
-        //then
-        assertThat(schedules.size()).isEqualTo(2);
-    }
 
     public User createUser(String id, String password) {
         User user = new User(id, password);

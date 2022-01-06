@@ -1,107 +1,55 @@
 package study.collector.api;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import study.collector.dto.schduledto.CreateScheduleRequest;
+import study.collector.dto.schduledto.SearchScheduleResponse;
 import study.collector.entity.Schedule;
 import study.collector.service.ScheduleService;
+import study.collector.session.SessionManager;
+import study.collector.session.SessionUserDto;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import java.time.LocalDate;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/schedule")
 public class ScheduleController {
 
-//    private final ScheduleService scheduleService;
-//
-//    public ScheduleController(ScheduleService scheduleService) {
-//        this.scheduleService = scheduleService;
-//    }
-//
-//    // 일정 조회
-//    @PostMapping("/schedule/search")
-//    public Result getSchedule(@RequestBody @Valid GetScheduleRequest request) {
-//        List<Schedule> schedules = scheduleService.searchById(request.getId());
-//        List<SimpleScheduleDto> simpleScheduleDto = simpleDtoMapping(schedules);
-//
-//        return new Result(simpleScheduleDto);
-//    }
-//
-//    @Data
-//    static class GetScheduleRequest {
-//        @NotEmpty
-//        private Long id;
-//    }
-//
-//    // 일정 추가
-//    @PostMapping("/schedule/create")
-//    public Result createSchedule(@RequestBody @Valid createScheduleRequest request) {
-//        scheduleService.create(request.getDate(), request.getContent(), request.getId());
-//
-//        // 조회
-//        List<Schedule> schedules = scheduleService.searchById(request.getId());
-//        List<SimpleScheduleDto> simpleScheduleDto = simpleDtoMapping(schedules);
-//
-//        return new Result(simpleScheduleDto);
-//    }
-//
-//    @Getter
-//    static class createScheduleRequest {
-//        @NotEmpty
-//        private Long id;
-//        @NotEmpty
-//        private String content;
-//        @NotEmpty
-//        private LocalDate date;
-//    }
-//
-//    //일정 삭제
-//    @PostMapping("/schedule/remove")
-//    public Result removeSchedule(@RequestBody @Valid removeScheduleRequest request) {
-//        scheduleService.deleteById(request.getScheduleId());
-//
-//        //조회
-//        List<Schedule> schedules = scheduleService.searchById(request.getId());
-//        List<SimpleScheduleDto> scheduleDtoList = simpleDtoMapping(schedules);
-//        return new Result(scheduleDtoList);
-//    }
-//
-//    @Data
-//    static class removeScheduleRequest {
-//        @NotEmpty
-//        private Long id;
-//        @NotEmpty
-//        private Long scheduleId;
-//    }
-//
-//    @Data
-//    @AllArgsConstructor
-//    static class Result<T> {
-//        private T data;
-//    }
-//
-//    public List<SimpleScheduleDto> simpleDtoMapping(List<Schedule> schedules) {
-//        return schedules.stream()
-//                .map(s -> new SimpleScheduleDto(s.getId(), s.getContent(), s.getDate()))
-//                .collect(Collectors.toList());
-//    }
-//
-//    @Getter
-//    static class SimpleScheduleDto {
-//        private Long scheduleId;
-//        private String content;
-//        private LocalDate date;
-//
-//        public SimpleScheduleDto(Long scheduleId, String content, LocalDate date) {
-//            this.scheduleId = scheduleId;
-//            this.content = content;
-//            this.date = date;
-//        }
-//    }
+    private final ScheduleService scheduleService;
+    private final SessionManager sessionManager;
+
+    // 일정 조회
+    @PostMapping("/search")
+    public Result getSchedule(HttpServletRequest request) {
+        SessionUserDto sessionUser = sessionManager.getUserFromSession(request);
+        List<SearchScheduleResponse> scheduleList = scheduleService.search(sessionUser.getId());
+
+        return new Result(scheduleList);
+    }
+
+    // 일정 초기화 + 추가
+    @PostMapping("/create")
+    public Result refreshSchedule(@RequestBody List<CreateScheduleRequest> createRequest, HttpServletRequest request) {
+        SessionUserDto sessionUser = sessionManager.getUserFromSession(request);
+        scheduleService.change(sessionUser.getId(), createRequest);
+
+        List<SearchScheduleResponse> scheduleList = scheduleService.search(sessionUser.getId());
+        return new Result(scheduleList);
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private T data;
+    }
 
 
 }
