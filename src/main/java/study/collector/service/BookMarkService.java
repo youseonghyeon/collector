@@ -15,7 +15,6 @@ import study.collector.repository.BookMarkRepository;
 import study.collector.repository.BookMarkTableRepository;
 import study.collector.repository.UserRepository;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +29,7 @@ public class BookMarkService implements BookMarkServiceInterface {
     private final BookMarkRepository bookMarkRepository;
     private final BookMarkTableRepository tableRepository;
     private final UserRepository userRepository;
+    private final JPAQueryFactory queryFactory;
 
 
     // 북마크 조회

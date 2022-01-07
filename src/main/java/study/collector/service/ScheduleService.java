@@ -2,27 +2,20 @@ package study.collector.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.collector.dto.schduledto.CreateScheduleRequest;
 import study.collector.dto.schduledto.SearchScheduleResponse;
 import study.collector.entity.Schedule;
 import study.collector.entity.User;
-import study.collector.exception.customexception.ScheduleException;
 import study.collector.repository.ScheduleRepository;
 import study.collector.repository.UserRepository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -34,6 +27,7 @@ public class ScheduleService implements ScheduleServiceInterface {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
     private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
 
     // 일정 추가
     @Transactional
